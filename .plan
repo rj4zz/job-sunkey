@@ -1,0 +1,130 @@
+# Project Implementation Plan: Local-First Job Tracker
+
+---
+
+## 1. Executive Summary
+We are building a **local-first, privacy-focused Job Tracking Dashboard** hosted on Cloudflare Pages. The application will run entirely in the browser (Single Page Application) using IndexedDB for storage, ensuring zero latency and 100% data privacy. The primary goal is to replace spreadsheet tracking with a rich UI that stores job descriptions, statuses, and notes without requiring a backend server.
+
+## 2. Technical Context & Constraints
+
+| Parameter | Details |
+|-----------|---------|
+| **Language** | JavaScript (ES6+) + React 18+ |
+| **Build Tool** | Vite (Fast builds, optimized for Cloudflare Pages) |
+| **Storage** | **IndexedDB** (via **Dexie.js** wrapper) |
+| **UI Framework** | **Shadcn UI** + Tailwind CSS (configured for JavaScript) |
+| **Hosting** | Cloudflare Pages (Static Asset Serving) |
+| **Constraints** | **No Backend DB**. Data lives on the user's device. "Nuclear" data loss risk if browser cache is cleared, requiring a robust Import/Export feature. |
+
+---
+
+## 3. Specifications & Requirements
+
+### User Stories (Prioritized)
+
+#### Story 1: Core Tracking (Priority: P1 - MVP)
+*   **Description**: As a job seeker, I want to save a job posting with its details so I can track my application progress.
+*   **Why**: To replace messy spreadsheets with a dedicated interface.
+*   **Acceptance Criteria**:
+    1. **Given** the "Add Job" form, **When** I enter Company, Role, and Description, **Then** the job appears in my "Applied" list immediately.
+    2. **Given** a saved job, **When** I click "Delete", **Then** it is permanently removed from the local database.
+
+#### Story 2: Data Backup (Priority: P1 - Critical)
+*   **Description**: As a user, I want to download my data as a file and restore it later.
+*   **Why**: Since data is local-only, clearing browser history deletes everything. I need a way to save/move my data.
+*   **Acceptance Criteria**:
+    1. **Given** I have tracked jobs, **When** I click "Export Data", **Then** a `jobs_backup_[date].json` file downloads.
+    2. **Given** a new browser session, **When** I upload that JSON file, **Then** all my previous job entries are restored.
+
+#### Story 3: Kanban/Status Workflow (Priority: P2)
+*   **Description**: As a user, I want to update the status of my application (e.g., from "Applied" to "Interviewing").
+*   **Acceptance Criteria**:
+    1. **Given** a job card, **When** I change status to "Rejected", **Then** the visual badge color changes (e.g., to red).
+
+### Functional Requirements
+*   **FR-001**: System MUST store at least 5MB of text data (Job Descriptions) without performance degradation.
+*   **FR-002**: System MUST load the dashboard in < 1 second (perceived performance).
+
+---
+
+## 4. Architecture & Data Model
+
+### Data Model (Dexie Schema)
+**Table:** `jobs`
+```javascript
+{
+  id: Number,           // Auto-increment Primary Key
+  company: String,      // Indexable
+  position: String,
+  status: String,       // 'saved' | 'applied' | 'interviewing' | 'offer' | 'rejected'
+  description: String,  // Large text blob
+  url: String,
+  salary: String,
+  dateAdded: Number,    // Date.now()
+  lastUpdated: Number
+}
+```
+
+### Proposed Directory Structure
+```text
+src/
+├── components/
+│   ├── ui/           # Shadcn components (Button, Card, Input)
+│   ├── JobForm.jsx   # Add/Edit logic
+│   ├── JobList.jsx   # Display logic (Grid/Table)
+│   └── DataControls.jsx # Import/Export buttons
+├── lib/
+│   ├── db.js         # Dexie database initialization
+│   └── utils.js      # Class merger for Tailwind
+├── App.jsx
+└── main.jsx
+```
+
+---
+
+## 5. Implementation Tasks
+
+**Legend**: `[P]` Parallelizable | `[US#]` User Story | `[ ]` To Do
+
+### Phase 1: Setup & Configuration
+*Foundational work.*
+
+- [x] **T001**: Initialize Vite React project (`npm create vite@latest . -- --template react`)
+- [x] **T002**: Install Tailwind CSS & PostCSS
+- [ ] **T003**: Configure `jsconfig.json` for path aliases (`@/*` -> `./src/*`)
+- [ ] **T004**: Initialize Shadcn UI (`npx shadcn@latest init`). **Important:** Select "TypeScript: No" during setup.
+
+### Phase 2: Core Foundation & Database
+*The backend-in-the-frontend.*
+
+- [ ] **T005**: Install Dexie (`npm install dexie dexie-react-hooks`)
+- [ ] **T006**: Create `src/lib/db.js` and define the schema: `.stores({ jobs: '++id, company, status, dateAdded' })`
+- [ ] **T007**: [P] Install necessary Shadcn components: `button`, `input`, `textarea`, `card`, `select`, `badge`.
+
+### Phase 3: User Story 1 (Add/List/Delete)
+*The MVP.*
+
+- [ ] **T008**: [US1] Create `JobForm.jsx` with state handling for Company, Role, Status.
+- [ ] **T009**: [US1] Connect Form to Dexie: `db.jobs.add({...})`.
+- [ ] **T010**: [US1] Create `JobList.jsx` using `useLiveQuery` hook to fetch data.
+- [ ] **T011**: [US1] Implement Delete functionality in the list view.
+
+### Phase 4: User Story 2 (Data Backup)
+*Critical Safety Feature.*
+
+- [ ] **T012**: [US2] Create `DataControls.jsx`.
+- [ ] **T013**: [US2] Implement Export: `db.jobs.toArray()` -> `JSON.stringify` -> `Blob` -> Download Link.
+- [ ] **T014**: [US2] Implement Import: File Input -> `JSON.parse` -> `db.jobs.bulkAdd()`.
+
+### Phase 5: Deployment & Polish
+- [ ] **T015**: [US3] Add Status Badges (Color coded: Green for Offer, Red for Rejected).
+- [ ] **T016**: Create Cloudflare Pages project and connect to GitHub repo.
+- [ ] **T017**: Verify Build Command: `npm run build` and Output Dir: `dist`.
+
+---
+
+## 6. Notes & Decisions
+
+*   **2025-12-28**: Chosen **Dexie.js** over `localStorage` because Job Descriptions can be large, and we need efficient indexing/sorting which LocalStorage cannot provide.
+*   **2025-12-28**: Chosen **Shadcn UI** even though we are using JavaScript. We will use the CLI to generate JS components or manually strip types if the CLI fails, as the visual quality saves significant CSS time.
+*   **2025-12-28**: **Import/Export** is elevated to P1 because we cannot rely on browser persistence indefinitely.
