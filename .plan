@@ -56,7 +56,7 @@ We are building a **local-first, privacy-focused Job Tracking Dashboard** hosted
   id: Number,           // Auto-increment Primary Key
   company: String,      // Indexable
   position: String,
-  status: String,       // 'saved' | 'applied' | 'interviewing' | 'offer' | 'rejected'
+  status: String,       // 'applied' | 'interviewing' | 'offer' | 'rejected'
   description: String,  // Large text blob
   url: String,
   salary: String,
@@ -128,11 +128,13 @@ src/
 *   **2025-12-28**: Chosen **Dexie.js** over `localStorage` because Job Descriptions can be large, and we need efficient indexing/sorting which LocalStorage cannot provide.
 *   **2025-12-28**: Chosen **Shadcn UI** even though we are using JavaScript. We will use the CLI to generate JS components or manually strip types if the CLI fails, as the visual quality saves significant CSS time.
 *   **2025-12-28**: **Import/Export** is elevated to P1 because we cannot rely on browser persistence indefinitely.
-- **29/12/25**: Transitioned to **Tailwind CSS v4** for the project foundation, prioritizing modern "CSS-first" architecture over legacy v3 configuration.
-* **29/12/25**: Discovered that `npx tailwindcss init -p` is deprecated in v4; configuration is now handled via the `@tailwindcss/vite` plugin and direct `@theme` blocks in CSS.
-* **29/12/25**: Configured **Vite Path Aliases** using `path.resolve` in `vite.config.js` and also `jsconfig.json` to support the `@/` prefix required by Shadcn UI CLI for downloading components and for sane imports(@/folder instead of ../.. hell)
-* **29/12/25**: Resolved "Unknown at rule @theme" editor warnings by identifying it as a linting false-positive, solvable via the Tailwind CSS IntelliSense extension or CSS linting overrides.
-* **29/12/25**: Verified that **Shadcn UI CLI** (v3.6.2+) natively detects Tailwind v4 and successfully generates JavaScript (`.jsx`) components when TypeScript is absent.
-* **29/12/25**: Confirmed Tailwind v4 styling is active by testing modern utility classes (e.g., `shadow-md`, `active:scale-95`) and the new `@import "tailwindcss"` directive.
-- **29/12/25**: Installed and learned that Dexie's `.stores()` schema only requires **indexable** fields; additional data (like large descriptions) can be stored without being explicitly declared in the schema. So those are the columns for which the indexing engine generates indexes.
-- **29/12/25**: Successfully installed Shadcn UI components (`button`, `card`, `input`, `textarea`, `select`, `badge`) and confirmed they are available for use, adhering to the project's JavaScript-first approach.
+- **2025-12-29**: Transitioned to **Tailwind CSS v4** for the project foundation, prioritizing modern "CSS-first" architecture over legacy v3 configuration.
+* **2025-12-29**: Discovered that `npx tailwindcss init -p` is deprecated in v4; configuration is now handled via the `@tailwindcss/vite` plugin and direct `@theme` blocks in CSS.
+* **2025-12-29**: Configured **Vite Path Aliases** using `path.resolve` in `vite.config.js` and also `jsconfig.json` to support the `@/` prefix required by Shadcn UI CLI for downloading components and for sane imports(@/folder instead of ../.. hell)
+* **2025-12-29**: Resolved "Unknown at rule @theme" editor warnings by identifying it as a linting false-positive, solvable via the Tailwind CSS IntelliSense extension or CSS linting overrides.
+* **2025-12-29**: Verified that **Shadcn UI CLI** (v3.6.2+) natively detects Tailwind v4 and successfully generates JavaScript (`.jsx`) components when TypeScript is absent.
+* **2025-12-29**: Confirmed Tailwind v4 styling is active by testing modern utility classes (e.g., `shadow-md`, `active:scale-95`) and the new `@import "tailwindcss"` directive.
+* **2025-12-29**: Installed and learned that Dexie's `.stores()` schema only requires **indexable** fields; additional data (like large descriptions) can be stored without being explicitly declared in the schema. So those are the columns for which the indexing engine generates indexes.
+* **2025-12-29**: Successfully installed Shadcn UI components (`button`, `card`, `input`, `textarea`, `select`, `badge`) and confirmed they are available for use, adhering to the project's JavaScript-first approach.
+* **2025-12-29**: Created `JobForm.jsx` and exported the component to App
+    * *Named vs Default*: Only one default export allowed per file, more appropriate for exporting components or primary API in contrast to constants, or utility functions that are exported using named exports.
