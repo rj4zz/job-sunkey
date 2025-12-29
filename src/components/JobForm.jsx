@@ -41,7 +41,7 @@ export default function JobForm({ onSubmit }) {
             />
             <Input
                 name="position"
-                placeholder="Role/Position"
+                placeholder="Position"
                 value={formData.position}
                 onChange={handleInputChange}
             />
