@@ -104,22 +104,24 @@ src/
 ### Phase 3: User Story 1 (Add/List/Delete)
 *The MVP.*
 
-- [ ] **T008**: [US1] Create `JobForm.jsx` with state handling for Company, Role, Status.
-- [ ] **T009**: [US1] Connect Form to Dexie: `db.jobs.add({...})`.
+- [x] **T008**: [US1] Create `JobForm.jsx` with state handling for Company, Role, Status.
+- [x] **T009**: [US1] Connect Form to Dexie: `db.jobs.add({...})`.
 - [ ] **T010**: [US1] Create `JobList.jsx` using `useLiveQuery` hook to fetch data.
 - [ ] **T011**: [US1] Implement Delete functionality in the list view.
+- [ ] **T012**: [US1] [P] Add basic form validation (e.g., required fields).
+- [ ] **T013**: [US1] [P] Implement success feedback (e.g., toast message) upon job submission.
 
 ### Phase 4: User Story 2 (Data Backup)
 *Critical Safety Feature.*
 
-- [ ] **T012**: [US2] Create `DataControls.jsx`.
-- [ ] **T013**: [US2] Implement Export: `db.jobs.toArray()` -> `JSON.stringify` -> `Blob` -> Download Link.
-- [ ] **T014**: [US2] Implement Import: File Input -> `JSON.parse` -> `db.jobs.bulkAdd()`.
+- [ ] **T014**: [US2] Create `DataControls.jsx`.
+- [ ] **T015**: [US2] Implement Export: `db.jobs.toArray()` -> `JSON.stringify` -> `Blob` -> Download Link.
+- [ ] **T016**: [US2] Implement Import: File Input -> `JSON.parse` -> `db.jobs.bulkAdd()`.
 
 ### Phase 5: Deployment & Polish
-- [ ] **T015**: [US3] Add Status Badges (Color coded: Green for Offer, Red for Rejected).
-- [ ] **T016**: Create Cloudflare Pages project and connect to GitHub repo.
-- [ ] **T017**: Verify Build Command: `npm run build` and Output Dir: `dist`.
+- [ ] **T017**: [US3] Add Status Badges (Color coded: Green for Offer, Red for Rejected).
+- [ ] **T018**: Create Cloudflare Pages project and connect to GitHub repo.
+- [ ] **T019**: Verify Build Command: `npm run build` and Output Dir: `dist`.
 
 ---
 
@@ -138,3 +140,4 @@ src/
 * **2025-12-29**: Successfully installed Shadcn UI components (`button`, `card`, `input`, `textarea`, `select`, `badge`) and confirmed they are available for use, adhering to the project's JavaScript-first approach.
 * **2025-12-29**: Created `JobForm.jsx` and exported the component to App
     * *Named vs Default*: Only one default export allowed per file, more appropriate for exporting components or primary API in contrast to constants, or utility functions that are exported using named exports.
+*   **2025-12-30**: Added `description` (with `Textarea` with longer text inputs), `url`, and `salary` fields (with their respective types) to the `JobForm` component's state and JSX, and updated the initial state in `JobForm.jsx` to include these new fields.

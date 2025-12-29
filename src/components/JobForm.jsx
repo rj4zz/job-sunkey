@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { 
-        Select, 
-        SelectTrigger, 
-        SelectValue,
-        SelectContent, 
-        SelectItem 
-    } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@/components/ui/select";
+import { Textarea } from "./ui/textarea";
+import { db } from "@/lib/db";
+import { useState } from "react";
 
 
 export default function JobForm({ onSubmit }) {
@@ -15,6 +17,9 @@ export default function JobForm({ onSubmit }) {
         company: '',
         position: '',
         status: 'applied',
+        description: "",
+        url: "",
+        salary: "",
     })
 
     const handleInputChange = (e) => {
@@ -25,10 +30,30 @@ export default function JobForm({ onSubmit }) {
     const handleStatusChange = (value) => {
         setFormData({...formData, status: value})
     }
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log("Form dummy submitted:", formData)
         //TODO: Connect to Dexie
+        try {
+            const jobData = {
+                //Add input data with current timestamp
+                ...formData,
+                dateAdded: Date.now(),
+                lastUpdated: Date.now(),
+            }
+            await db.jobs.add(jobData)
+            console.log("Job Added Successfully")
+        } catch (error) {
+            console.error("Error adding job:", error)
+        } finally {
+            setFormData({
+                company: "",
+                position: "",
+                status: "applied",
+                description: "",
+                url: "",
+                salary: "",
+            })
+        }
     }
 
     return (
@@ -56,6 +81,26 @@ export default function JobForm({ onSubmit }) {
                 <SelectItem value="rejected">Rejected</SelectItem>
                 </SelectContent>
             </Select>
+            <Textarea 
+                name="description"
+                placeholder="Description"
+                value={formData.description}
+                onChange={handleInputChange}
+            />
+            <Input
+                name="url"
+                type="URL"
+                placeholder="URL"
+                value={formData.url}
+                onChange={handleInputChange}
+            />
+            <Input
+                name="salary"
+                type="Number"
+                placeholder="Salary"
+                value={formData.salary}
+                onChange={handleInputChange}
+            />
             <Button type="submit">Add Job</Button>
         </form>
     )
