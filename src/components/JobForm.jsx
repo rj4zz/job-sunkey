@@ -12,7 +12,7 @@ import { db } from "@/lib/db";
 import { useState } from "react";
 
 
-export default function JobForm({ onSubmit }) {
+export default function JobForm() {
     const [formData, setFormData] = useState({
         company: '',
         position: '',
@@ -32,7 +32,6 @@ export default function JobForm({ onSubmit }) {
     }
     const handleSubmit = async (e) => {
         e.preventDefault()
-        //TODO: Connect to Dexie
         try {
             const jobData = {
                 //Add input data with current timestamp
@@ -96,7 +95,7 @@ export default function JobForm({ onSubmit }) {
             />
             <Input
                 name="salary"
-                type="Number"
+                type="number"
                 placeholder="Salary"
                 value={formData.salary}
                 onChange={handleInputChange}
