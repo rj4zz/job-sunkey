@@ -1,8 +1,8 @@
+import { Badge } from "@/components/ui/badge";
 import { db } from "@/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
-import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
-
+import { Button } from "./ui/button";
 function getStatusVariant(status) {
     switch (status) {
         case 'rejected':
@@ -25,6 +25,16 @@ export default function JobTable() {
         }
     })
 
+    const handleDelete = async (id) => {
+        try {
+            await db.jobs.delete(id)
+            console.log("Listing with {id} deleted successfully.");
+        } catch (error) {
+            console.error(`Failed to delete listing with ID {id}`, error);
+        }
+        
+    }
+
     if (!jobs) {
         return <div className="text-center">Loading...</div>
     }
@@ -42,6 +52,7 @@ export default function JobTable() {
                         <TableHead>Position</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Date Added</TableHead>
+                        <TableHead> </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -57,6 +68,16 @@ export default function JobTable() {
                             </TableCell>
                             <TableCell>
                                 {new Date(job.dateAdded).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell>
+                                <Button
+                                    variant="destructive"
+                                    make very small
+                                    size="sm"
+                                    onClick={() => handleDelete(job.id)}
+                                >
+                                    Delete
+                                </Button>
                             </TableCell>
                         </TableRow>
                     )})}

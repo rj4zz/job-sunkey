@@ -109,8 +109,8 @@ src/
 
 - [x] **T008**: [US1] Create `JobForm.jsx` with state handling for Company, Role, Status.
 - [x] **T009**: [US1] Connect Form to Dexie: `db.jobs.add({...})`.
-- [x] **T010**: [US1] Create `JobList.jsx` using `useLiveQuery` hook to fetch data.
-- [ ] **T011**: [US1] Implement Delete functionality in the list view.
+- [x] **T010**: [US1] Create `JobTable.jsx` using `useLiveQuery` hook to fetch data.
+- [ ] **T011**: [US1] Implement Delete and sorting functionality in the table view.
 - [ ] **T012**: [US1] [P] Add basic form validation (e.g., required fields).
 - [ ] **T013**: [US1] [P] Implement success feedback (e.g., toast message) upon job submission.
 
