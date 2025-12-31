@@ -1,8 +1,28 @@
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { db } from "@/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "./ui/table";
+
 function getStatusVariant(status) {
     switch (status) {
         case 'rejected':
@@ -28,9 +48,12 @@ export default function JobTable() {
     const handleDelete = async (id) => {
         try {
             await db.jobs.delete(id)
-            console.log("Listing with {id} deleted successfully.");
+            console.log("Listing deleted successfully.")
+            toast.success("Listing deleted successfully.")
+            console.log("Sonner Reached.");
         } catch (error) {
-            console.error(`Failed to delete listing with ID {id}`, error);
+            toast.error("Failed to delete listing. Please try again.")
+            console.error(`Failed to delete job. Please try again`, error)
         }
         
     }
@@ -70,14 +93,29 @@ export default function JobTable() {
                                 {new Date(job.dateAdded).toLocaleDateString()}
                             </TableCell>
                             <TableCell>
-                                <Button
-                                    variant="destructive"
-                                    make very small
-                                    size="sm"
-                                    onClick={() => handleDelete(job.id)}
-                                >
-                                    Delete
-                                </Button>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button variant="destructive" size="sm">
+                                            Delete
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>
+                                                Are you sure you want to delete this listing?
+                                            </AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone. This will permanently delete the job.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            <AlertDialogAction onClick={() => handleDelete(job.id)}>
+                                                Continue
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </TableCell>
                         </TableRow>
                     )})}

@@ -102,7 +102,7 @@ src/
 
 - [x] **T005**: Install Dexie (`npm install dexie dexie-react-hooks`)
 - [x] **T006**: Create `src/lib/db.js` and define the schema: `.stores({ jobs: '++id, company, status, dateAdded' })`
-- [x] **T007**: [P] Install necessary Shadcn components: `button`, `input`, `textarea`, `card`, `select`, `badge`.
+- [x] **T007**: [P] Install necessary Shadcn components.
 
 ### Phase 3: User Story 1 (Add/List/Delete)
 *The MVP.*
@@ -144,3 +144,4 @@ src/
 * **2025-12-29**: Created `JobForm.jsx` and exported the component to App
     * *Named vs Default*: Only one default export allowed per file, more appropriate for exporting components or primary API in contrast to constants, or utility functions that are exported using named exports.
 *   **2025-12-30**: Added `description` (with `Textarea` with longer text inputs), `url`, and `salary` fields (with their respective types) to the `JobForm` component's state and JSX, and updated the initial state in `JobForm.jsx` to include these new fields.
+* **2025-12-31**: Added a confirmation dialog and toaster to the Delete functionality for better UX. Since the toaster had to be declared globally, I added it to `App.jsx`

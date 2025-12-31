@@ -1,6 +1,7 @@
 import JobForm from '@/components/JobForm'
 import JobTable from '@/components/JobTable'
 import './App.css'
+import { Toaster } from './components/ui/sonner'
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <div className="w-full max-w-4xl mt-8">
         <JobTable />
       </div>
+      <Toaster />
     </div>
   )
 }
