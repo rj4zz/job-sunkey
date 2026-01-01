@@ -1,19 +1,8 @@
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
 import { db } from "@/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
-import { toast } from "sonner";
-import { Button } from "./ui/button";
+import { useMemo, useState } from "react";
+import JobRow from "./JobRow";
+import SortableTableHead from "./SortableTableHead";
 import {
     Table,
     TableBody,
@@ -22,22 +11,8 @@ import {
     TableHeader,
     TableRow
 } from "./ui/table";
-import { useState, useMemo } from "react";
 
-function getStatusVariant(status) {
-    switch (status) {
-        case 'rejected':
-            return 'destructive'
-        case 'offer':
-            return 'success'
-        case 'interviewing':
-            return 'info' 
-        default:
-            return 'default';
-    }
-}
 export default function JobTable() {
-    
 
     const jobs = useLiveQuery(() => {
         try {
@@ -64,7 +39,11 @@ export default function JobTable() {
     const sortedJobs = useMemo(() => {
         if (!sortConfig.key) return jobs;
         return [...jobs].sort((a,b) => {
-            if (a[sortConfig.key] < b[sortConfig.key]) {
+            if (sortConfig.key === 'dateAdded') {
+                return sortConfig.direction === 'asc'
+                ? a.dateAddded - b.dateAdded
+                : b.dateAddded - a.dateAddded
+            } else if (a[sortConfig.key] < b[sortConfig.key]) {
                 return sortConfig.direction === 'asc' ? -1 : 1
                 
             } else if (a[sortConfig.key] > b[sortConfig.key]) {
@@ -74,86 +53,49 @@ export default function JobTable() {
         })
     }, [jobs, sortConfig])
 
-    const handleDelete = async (id) => {
-        try {
-            await db.jobs.delete(id)
-            toast.success("Listing deleted successfully.")
-        } catch (error) {
-            toast.error("Failed to delete listing. Please try again.")
-            console.error(`Failed to delete job. Please try again`, error)
-        }
-        
-    }
-
     if (!jobs) {
         return <div className="text-center">Loading...</div>
     }
 
-    if (jobs.length === 0) {
-        return <div className="text-center">No jobs found. Add a job to get started.</div>
-    }
-
     return (
         <div className="overflow-x-auto">
-            <Table>
+            <Table className="min-w-fit">
                 <TableHeader>
                     <TableRow>
-                        <TableHead 
-                            onClick={() => requestSort('company')}
+                        <SortableTableHead
+                            sortConfig={sortConfig}
+                            requestSort={requestSort}
+                            columnKey="company"
                         >
-                            Company {sortConfig.key === 'company' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
-                        </TableHead>
-                        <TableHead 
-                            onClick={() => requestSort('position')}
+                            Company
+                        </SortableTableHead>
+                        <SortableTableHead
+                            sortConfig={sortConfig}
+                            requestSort={requestSort}
+                            columnKey="position"
                         >
-                            Position {sortConfig.key === 'position' && (sortConfig.direction === 'asc' ? '🔼' : '🔽')}
-                        </TableHead>
+                            Position
+                        </SortableTableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Date Added</TableHead>
-                        <TableHead> </TableHead>
+                        <TableHead></TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {sortedJobs.map((job) => {return(
-                        <TableRow key={job.id}>
-                            <TableCell>{job.company}</TableCell>
-                            <TableCell>{job.position}</TableCell>
-                            <TableCell>
-                                <Badge 
-                                    variant={getStatusVariant(job.status)}>
-                                    {job.status}
-                                </Badge>
-                            </TableCell>
-                            <TableCell>
-                                {new Date(job.dateAdded).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell>
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <Button variant="destructive" size="sm">
-                                            Delete
-                                        </Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>
-                                                Are you sure you want to delete this listing?
-                                            </AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This action cannot be undone. This will permanently delete the job.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction onClick={() => handleDelete(job.id)}>
-                                                Continue
-                                            </AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
+                    {sortedJobs.length === 0 ? (
+                        <TableRow>
+                            <TableCell 
+                                colspan={5} 
+                                className="text-center py-8"
+                            >
+                                No jobs found. Add a job to get started.
                             </TableCell>
                         </TableRow>
-                    )})}
+                    ) : (
+                        sortedJobs.map((job) => (
+                            <JobRow key={job.id} job={job} />
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </div>

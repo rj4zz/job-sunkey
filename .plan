@@ -110,21 +110,21 @@ src/
 - [x] **T008**: [US1] Create `JobForm.jsx` with state handling for Company, Role, Status.
 - [x] **T009**: [US1] Connect Form to Dexie: `db.jobs.add({...})`.
 - [x] **T010**: [US1] Create `JobTable.jsx` using `useLiveQuery` hook to fetch data.
-- [ ] **T011**: [US1] Implement Delete and sorting functionality in the table view.
-- [ ] **T012**: [US1] [P] Add basic form validation (e.g., required fields).
-- [ ] **T013**: [US1] [P] Implement success feedback (e.g., toast message) upon job submission.
+- [x] **T011**: [US1] Implement Delete and sorting functionality in the table view.
+- [ ] **T012**: [US1] [P] Implement success feedback (e.g., toast message) upon job submission.
 
 ### Phase 4: User Story 2 (Data Backup)
 *Critical Safety Feature.*
 
-- [ ] **T014**: [US2] Create `DataControls.jsx`.
-- [ ] **T015**: [US2] Implement Export: `db.jobs.toArray()` -> `JSON.stringify` -> `Blob` -> Download Link.
-- [ ] **T016**: [US2] Implement Import: File Input -> `JSON.parse` -> `db.jobs.bulkAdd()`.
+- [ ] **T013**: [US2] Create `DataControls.jsx`.
+- [ ] **T014**: [US2] Implement Export: `db.jobs.toArray()` -> `JSON.stringify` -> `Blob` -> Download Link.
+- [ ] **T015**: [US2] Implement Import: File Input -> `JSON.parse` -> `db.jobs.bulkAdd()`.
 
 ### Phase 5: Deployment & Polish
-- [ ] **T017**: [US3] Add Status Badges (Color coded: Green for Offer, Red for Rejected).
-- [ ] **T018**: Create Cloudflare Pages project and connect to GitHub repo.
-- [ ] **T019**: Verify Build Command: `npm run build` and Output Dir: `dist`.
+- [ ] **T016**: Create Cloudflare Pages project and connect to GitHub repo.
+- [ ] **T017**: Verify Build Command: `npm run build` and Output Dir: `dist`.
+- [ ] **T018**: [US1] [P] Add basic form validation (e.g., required fields).
+- [ ] **T019**: [US3] [P] Add Status Badges (Color coded: Green for Offer, Red for Rejected).
 
 ---
 
@@ -147,3 +147,5 @@ src/
 * **2025-12-31**: Added a confirmation dialog and toaster to the Delete functionality for better UX. Since the toaster had to be declared globally, I added it to `App.jsx`.
     * `App.jsx` serves as the root component where all other components and global contexts are nested.
     * `main.jsx` is primarily concerned with initialization—setting up the React root, potentially configuring global providers, and mounting the main App component to your HTML file's root element.
+* **2025-01-01**: Decided to break down the JobTable component into many small components like `JobRow` and `SortableTableHead`
+* **2025-01-01**: Used utility classes provided by Tailwind CSS for controlling the size of lucide icons representing sort up and sort down in Job Listing Table
