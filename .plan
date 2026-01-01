@@ -111,7 +111,7 @@ src/
 - [x] **T009**: [US1] Connect Form to Dexie: `db.jobs.add({...})`.
 - [x] **T010**: [US1] Create `JobTable.jsx` using `useLiveQuery` hook to fetch data.
 - [x] **T011**: [US1] Implement Delete and sorting functionality in the table view.
-- [ ] **T012**: [US1] [P] Implement success feedback (e.g., toast message) upon job submission.
+- [x] **T012**: [US1] [P] Implement success feedback (e.g., toast message) upon job submission.
 
 ### Phase 4: User Story 2 (Data Backup)
 *Critical Safety Feature.*

@@ -42,7 +42,7 @@ export default function JobTable() {
             if (sortConfig.key === 'dateAdded') {
                 return sortConfig.direction === 'asc'
                 ? a.dateAddded - b.dateAdded
-                : b.dateAddded - a.dateAddded
+                : b.dateAddded - a.dateAdded
             } else if (a[sortConfig.key] < b[sortConfig.key]) {
                 return sortConfig.direction === 'asc' ? -1 : 1
                 
@@ -59,7 +59,7 @@ export default function JobTable() {
 
     return (
         <div className="overflow-x-auto">
-            <Table className="min-w-fit">
+            <Table className="min-w-fit table-center">
                 <TableHeader>
                     <TableRow>
                         <SortableTableHead
@@ -76,8 +76,20 @@ export default function JobTable() {
                         >
                             Position
                         </SortableTableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Date Added</TableHead>
+                        <SortableTableHead
+                            sortConfig={sortConfig}
+                            requestSort={requestSort}
+                            columnKey="status"
+                        >
+                            Status
+                        </SortableTableHead>
+                        <SortableTableHead
+                            sortConfig={sortConfig}
+                            requestSort={requestSort}
+                            columnKey="dateAdded"
+                        >
+                            Date Added
+                        </SortableTableHead>
                         <TableHead></TableHead>
                     </TableRow>
                 </TableHeader>

@@ -10,6 +10,7 @@ import {
 import { Textarea } from "./ui/textarea";
 import { db } from "@/lib/db";
 import { useState } from "react";
+import { toast } from "sonner";
 
 
 export default function JobForm() {
@@ -40,8 +41,9 @@ export default function JobForm() {
                 lastUpdated: Date.now(),
             }
             await db.jobs.add(jobData)
-            console.log("Job Added Successfully")
+            toast.success("Job Added Successfully")
         } catch (error) {
+            toast.error("Could not add job. Please try again.")
             console.error("Error adding job:", error)
         } finally {
             setFormData({
