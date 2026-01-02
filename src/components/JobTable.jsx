@@ -97,7 +97,7 @@ export default function JobTable() {
                     {sortedJobs.length === 0 ? (
                         <TableRow>
                             <TableCell 
-                                colspan={5} 
+                                colSpan={5} 
                                 className="text-center py-8"
                             >
                                 No jobs found. Add a job to get started.

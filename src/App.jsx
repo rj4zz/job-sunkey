@@ -1,7 +1,8 @@
+import DataControls from '@/components/DataControls'
 import JobForm from '@/components/JobForm'
 import JobTable from '@/components/JobTable'
+import { Toaster } from '@/components/ui/sonner'
 import './App.css'
-import { Toaster } from './components/ui/sonner'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <JobForm />
       </div>
       <div className="w-full max-w-4xl mt-8">
+        <DataControls />
         <JobTable />
       </div>
       <Toaster />

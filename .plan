@@ -116,11 +116,12 @@ src/
 ### Phase 4: User Story 2 (Data Backup)
 *Critical Safety Feature.*
 
-- [ ] **T013**: [US2] Create `DataControls.jsx`.
-- [ ] **T014**: [US2] Implement Export: `db.jobs.toArray()` -> `JSON.stringify` -> `Blob` -> Download Link.
-- [ ] **T015**: [US2] Implement Import: File Input -> `JSON.parse` -> `db.jobs.bulkAdd()`.
+- [x] **T013**: [US2] Create `DataControls.jsx`.
+- [x] **T014**: [US2] Implement Export.
+- [ ] **T015**: [US2] Implement Import.
 
 ### Phase 5: Deployment & Polish
+- [ ] **T016**: Move the `JobForm` to a `shadcn sheet` component on the right
 - [ ] **T016**: Create Cloudflare Pages project and connect to GitHub repo.
 - [ ] **T017**: Verify Build Command: `npm run build` and Output Dir: `dist`.
 - [ ] **T018**: [US1] [P] Add basic form validation (e.g., required fields).
@@ -139,13 +140,19 @@ src/
 * **2025-12-29**: Resolved "Unknown at rule @theme" editor warnings by identifying it as a linting false-positive, solvable via the Tailwind CSS IntelliSense extension or CSS linting overrides.
 * **2025-12-29**: Verified that **Shadcn UI CLI** (v3.6.2+) natively detects Tailwind v4 and successfully generates JavaScript (`.jsx`) components when TypeScript is absent.
 * **2025-12-29**: Confirmed Tailwind v4 styling is active by testing modern utility classes (e.g., `shadow-md`, `active:scale-95`) and the new `@import "tailwindcss"` directive.
-* **2025-12-29**: Installed and learned that Dexie's `.stores()` schema only requires **indexable** fields; additional data (like large descriptions) can be stored without being explicitly declared in the schema. So those are the columns for which the indexing engine generates indexes.
+* **2025-12-29**: [US1] Installed and learned that Dexie's `.stores()` schema only requires **indexable** fields; additional data (like large descriptions) can be stored without being explicitly declared in the schema. So those are the columns for which the indexing engine generates indexes.
 * **2025-12-29**: Successfully installed Shadcn UI components (`button`, `card`, `input`, `textarea`, `select`, `badge`) and confirmed they are available for use, adhering to the project's JavaScript-first approach.
-* **2025-12-29**: Created `JobForm.jsx` and exported the component to App
+* **2025-12-29**: [US1] Created `JobForm.jsx` and exported the component to App
     * *Named vs Default*: Only one default export allowed per file, more appropriate for exporting components or primary API in contrast to constants, or utility functions that are exported using named exports.
-*   **2025-12-30**: Added `description` (with `Textarea` with longer text inputs), `url`, and `salary` fields (with their respective types) to the `JobForm` component's state and JSX, and updated the initial state in `JobForm.jsx` to include these new fields.
-* **2025-12-31**: Added a confirmation dialog and toaster to the Delete functionality for better UX. Since the toaster had to be declared globally, I added it to `App.jsx`.
+*   **2025-12-30**: [US1] Added `description` (with `Textarea` with longer text inputs), `url`, and `salary` fields (with their respective types) to the `JobForm` component's state and JSX, and updated the initial state in `JobForm.jsx` to include these new fields.
+* **2025-12-31**: [US1] Added a confirmation dialog and toaster to the Delete functionality for better UX. Since the toaster had to be declared globally, I added it to `App.jsx`.
     * `App.jsx` serves as the root component where all other components and global contexts are nested.
     * `main.jsx` is primarily concerned with initialization—setting up the React root, potentially configuring global providers, and mounting the main App component to your HTML file's root element.
-* **2025-01-01**: Decided to break down the JobTable component into many small components like `JobRow` and `SortableTableHead`
+* **2025-01-01**: [US1] Decided to break down the JobTable component into many small components like `JobRow` and `SortableTableHead`
 * **2025-01-01**: Used utility classes provided by Tailwind CSS for controlling the size of lucide icons representing sort up and sort down in Job Listing Table
+* **2025-01-02**: [US2] Decided to use hidden file input for file upload and used React's `useRef` Hook.
+    * `useRef` is a built-in React Hook that allows us to persist a value without triggering a re-render when its value changes(which happens synchronously). This allows us to use it for behind the scenes logic like file upload since it can persist the hidden link to `<Input>` tag and mimic a click on it when I invoke it through Import button.
+* **2025-01-02**: [US2] Used the modern Promise-based `file.text()` API with concise syntax for reading the uploaded data file.
+    * `FileReader.readAsText()` allows progress tracking which isn't relevant here.
+* **2025-01-02**: [US2] Reset the file upload input finally after handling fileUpload.
+* **2025-01-02**: [US1] Switched to a UUID based primary key so as to make data transfer easier.
