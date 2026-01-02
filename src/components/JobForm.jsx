@@ -35,6 +35,7 @@ export default function JobForm() {
         e.preventDefault()
         try {
             const jobData = {
+                //Generate UUID
                 id: self.crypto.randomUUID(),
                 //Add input data with current timestamp
                 ...formData,
