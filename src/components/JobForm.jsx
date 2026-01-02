@@ -35,6 +35,7 @@ export default function JobForm() {
         e.preventDefault()
         try {
             const jobData = {
+                id: self.crypto.randomUUID(),
                 //Add input data with current timestamp
                 ...formData,
                 dateAdded: Date.now(),
@@ -73,13 +74,13 @@ export default function JobForm() {
             />
             <Select onValueChange={handleStatusChange} value={formData.status}>
                 <SelectTrigger>
-                <SelectValue placeholder="Status" />
+                    <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                <SelectItem value="applied">Applied</SelectItem>
-                <SelectItem value="interviewing">Interviewing</SelectItem>
-                <SelectItem value="offer">Offer</SelectItem>
-                <SelectItem value="rejected">Rejected</SelectItem>
+                    <SelectItem value="applied">Applied</SelectItem>
+                    <SelectItem value="interviewing">Interviewing</SelectItem>
+                    <SelectItem value="offer">Offer</SelectItem>
+                    <SelectItem value="rejected">Rejected</SelectItem>
                 </SelectContent>
             </Select>
             <Textarea 

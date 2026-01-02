@@ -9,7 +9,7 @@ export const db = new Dexie('JobTrackerDB')
 */
 try {
     db.version(1).stores({
-        jobs: '++id, company, status, dateAdded'
+        jobs: 'id, company, status, dateAdded'
     })
     console.log("Database initialized successfully");
 } catch (error) {
