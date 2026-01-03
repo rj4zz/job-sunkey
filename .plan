@@ -121,9 +121,10 @@ src/
 - [x] **T015**: [US2] Implement Import.
 
 ### Phase 5: Deployment & Polish
-- [x] **T016**: Move the `JobForm` to a shadcn `Sheet` component on the right
-- [ ] **T017**: Create Cloudflare Pages project and connect to GitHub repo.
-- [ ] **T018**: Verify Build Command: `npm run build` and Output Dir: `dist`.
+- [x] **T016**: [US1] Move the `JobForm` to a shadcn `Sheet` component on the right
+- [ ] **T017**: [US1] Show a dropdown menu for sorting and hiding when clicking the column head.
+- [ ] **T018**: Create Cloudflare Pages project and connect to GitHub repo.
+- [ ] **T019**: Verify Build Command: `npm run build` and Output Dir: `dist`.
 
 ---
 

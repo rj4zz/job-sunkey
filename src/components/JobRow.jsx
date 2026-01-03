@@ -51,7 +51,7 @@ export default function JobRow({ job }) {
                 </Badge>
             </TableCell>
             <TableCell>
-                {new Date(job.dateAdded).toLocaleDateString()}
+                {new Date(job.dateAdded).toLocaleDateString('en-GB')}
             </TableCell>
             <TableCell>
                 <AlertDialog>
@@ -71,7 +71,9 @@ export default function JobRow({ job }) {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handleDelete(job.id)}>
+                            <AlertDialogAction 
+                                onClick={() => handleDelete(job.id)}
+                            >
                                 Continue
                             </AlertDialogAction>
                         </AlertDialogFooter>

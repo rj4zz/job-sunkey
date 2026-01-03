@@ -40,9 +40,8 @@ export default function DataControls() {
 
     const handleFileUpload = async (event) => {
         try {
-            const file = event.target.files[0]
+            const [file] = event.target.files
             console.log("Found:", file.name)
-
             const data = await readAndParseData(file)
             if (Array.isArray(data) && data.length === 0) {
                 throw new Error("Array is empty!");
@@ -50,8 +49,8 @@ export default function DataControls() {
                 throw new Error("Invalid Data!");
             }
 
+            //Sync Database
             await db.jobs.bulkPut(data)
-
             toast.success("Import Successful!")
         } catch (error) {
             console.error("Import Error:", error);

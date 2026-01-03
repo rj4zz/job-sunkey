@@ -41,8 +41,8 @@ export default function JobTable() {
         return [...jobs].sort((a,b) => {
             if (sortConfig.key === 'dateAdded') {
                 return sortConfig.direction === 'asc'
-                ? a.dateAddded - b.dateAdded
-                : b.dateAddded - a.dateAdded
+                ? a.dateAdded - b.dateAdded
+                : b.dateAdded - a.dateAdded
             } else if (a[sortConfig.key] < b[sortConfig.key]) {
                 return sortConfig.direction === 'asc' ? -1 : 1
                 
