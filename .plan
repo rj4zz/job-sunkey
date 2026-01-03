@@ -56,7 +56,7 @@ We are building a **local-first, privacy-focused Job Tracking Dashboard** hosted
 **Table:** `jobs`
 ```javascript
 {
-  id: Number,           // Auto-increment Primary Key
+  id: Number,           // UUID based Primary Key
   company: String,      // Indexable
   position: String,
   status: String,       // 'applied' | 'interviewing' | 'offer' | 'rejected'
@@ -118,14 +118,12 @@ src/
 
 - [x] **T013**: [US2] Create `DataControls.jsx`.
 - [x] **T014**: [US2] Implement Export.
-- [ ] **T015**: [US2] Implement Import.
+- [x] **T015**: [US2] Implement Import.
 
 ### Phase 5: Deployment & Polish
-- [ ] **T016**: Move the `JobForm` to a `shadcn sheet` component on the right
-- [ ] **T016**: Create Cloudflare Pages project and connect to GitHub repo.
-- [ ] **T017**: Verify Build Command: `npm run build` and Output Dir: `dist`.
-- [ ] **T018**: [US1] [P] Add basic form validation (e.g., required fields).
-- [ ] **T019**: [US3] [P] Add Status Badges (Color coded: Green for Offer, Red for Rejected).
+- [x] **T016**: Move the `JobForm` to a shadcn `Sheet` component on the right
+- [ ] **T017**: Create Cloudflare Pages project and connect to GitHub repo.
+- [ ] **T018**: Verify Build Command: `npm run build` and Output Dir: `dist`.
 
 ---
 
@@ -151,8 +149,12 @@ src/
 * **2025-01-01**: [US1] Decided to break down the JobTable component into many small components like `JobRow` and `SortableTableHead`
 * **2025-01-01**: Used utility classes provided by Tailwind CSS for controlling the size of lucide icons representing sort up and sort down in Job Listing Table
 * **2025-01-02**: [US2] Decided to use hidden file input for file upload and used React's `useRef` Hook.
-    * `useRef` is a built-in React Hook that allows us to persist a value without triggering a re-render when its value changes(which happens synchronously). This allows us to use it for behind the scenes logic like file upload since it can persist the hidden link to `<Input>` tag and mimic a click on it when I invoke it through Import button.
+    * `useRef` is a built-in React Hook that allows us to persist a value without triggering a re-render when its value changes(which happens synchronously). This allows us to use it for behind the scenes logic like file upload since it can persist the hidden link to `<Input>` tag and mimic a click on it when I invoke it through Import button. However, should always be used inside event handlers or `useEffect` hooks instead of being used for rendering components. It should be also be called only at the top level.
 * **2025-01-02**: [US2] Used the modern Promise-based `file.text()` API with concise syntax for reading the uploaded data file.
     * `FileReader.readAsText()` allows progress tracking which isn't relevant here.
 * **2025-01-02**: [US2] Reset the file upload input finally after handling fileUpload.
 * **2025-01-02**: [US1] Switched to a UUID based primary key so as to make data transfer easier.
+* **2025-01-02**: [US2] Used `Table.bulkPut` that upserts from backup.
+* **2025-01-03**: [US2] Refactored `JobForm` to a side panel.
+    * Passed the control of open state as a prop to the original form component, which is then called optionally, enabling its use in other contexts.
+    * Also used `SheetContent`component's `onInteractOutside` prop to block any unforseen interaction from accidently closing the form.

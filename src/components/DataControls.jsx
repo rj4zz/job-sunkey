@@ -62,20 +62,22 @@ export default function DataControls() {
     }
 
     return (
-        <div className="flex gap-2 mb-4 justify-end">
+        <div>
+            <input 
+                type="file"
+                accept=".json"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleFileUpload}
+            />
             <ButtonGroup>
-                <input 
-                    type="file"
-                    accept=".json"
-                    ref={fileInputRef}
-                    className="hidden"
-                    onChange={handleFileUpload}
-                />
-                <Button size="sm" variant="outline" onClick={handleExport}>
+                <Button variant="outline" onClick={handleExport}>
                     <FileDown /> Export
                 </Button>
-                <Button size="sm" variant="outline" 
-                        onClick={() => {fileInputRef.current?.click()}}>
+
+                <Button variant="outline" 
+                        onClick={() => {fileInputRef.current?.click()}}
+                >
                     <FileUp /> Import
                 </Button>
             </ButtonGroup>

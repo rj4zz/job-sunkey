@@ -13,7 +13,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 
-export default function JobForm() {
+export default function JobForm({ onSubmit }) {
     const [formData, setFormData] = useState({
         company: '',
         position: '',
@@ -31,8 +31,8 @@ export default function JobForm() {
     const handleStatusChange = (value) => {
         setFormData({...formData, status: value})
     }
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const handleSubmit = async (event) => {
+        event.preventDefault()
         try {
             const jobData = {
                 //Generate UUID
@@ -43,6 +43,7 @@ export default function JobForm() {
                 lastUpdated: Date.now(),
             }
             await db.jobs.add(jobData)
+            onSubmit?.();
             toast.success("Job Added Successfully")
         } catch (error) {
             toast.error("Could not add job. Please try again.")
