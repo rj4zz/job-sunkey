@@ -1,4 +1,4 @@
-import { TableHead } from "./ui/table";
+import { TableHead } from "../ui/table";
 import { ArrowUpNarrowWide, ArrowDownWideNarrow } from "lucide-react";
 
 export default function SortableTableHead({ 

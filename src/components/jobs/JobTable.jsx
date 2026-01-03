@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useMemo, useState } from "react";
 import JobRow from "./JobRow";
-import SortableTableHead from "./SortableTableHead";
+import SortableTableHead from "../common/SortableTableHead";
 import {
     Table,
     TableBody,
@@ -10,7 +10,7 @@ import {
     TableHead,
     TableHeader,
     TableRow
-} from "./ui/table";
+} from "../ui/table";
 
 export default function JobTable() {
 

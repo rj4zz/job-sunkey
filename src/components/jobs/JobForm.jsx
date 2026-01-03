@@ -7,7 +7,7 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
-import { Textarea } from "./ui/textarea";
+import { Textarea } from "../ui/textarea";
 import { db } from "@/lib/db";
 import { useState } from "react";
 import { toast } from "sonner";

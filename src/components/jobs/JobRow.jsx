@@ -12,9 +12,9 @@ import {
 import { db } from "@/lib/db";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
-import { TableCell, TableRow } from "./ui/table";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { TableCell, TableRow } from "../ui/table";
 function getStatusVariant(status) {
     switch (status) {
         case 'rejected':
