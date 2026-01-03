@@ -176,11 +176,8 @@ graph TD
 ### Phase 5: Deployment & Polish
 - [x] **T016**: [US1] Move the `JobForm` to a shadcn `Sheet` component on the right
 - [ ] **T017**: [US1] Show a dropdown menu for sorting and hiding when clicking the column head.
-- [ ] **T018**: [Optimization] Verify production minification (Vite uses LightningCSS/esbuild by default; no manual cssnano needed).
-- [ ] **T019**: Create Cloudflare Pages project and connect to GitHub repo.
-- [ ] **T020**: Verify Build Command: `npm run build` and Output Dir: `dist`.
-- [ ] **T021**: [Refactor] Reorganize component directory structure (jobs/, data/, common/) and update imports.
-
+- [ ] **T018**: Create Cloudflare Pages project and connect to GitHub repo.
+- [ ] **T019**: Verify Build Command: `npm run build` and Output Dir: `dist`.
 
 ---
 
