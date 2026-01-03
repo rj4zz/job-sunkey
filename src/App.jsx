@@ -1,9 +1,7 @@
 import DataControls from '@/components/data/DataControls'
-import JobForm from '@/components/jobs/JobForm'
 import JobTable from '@/components/jobs/JobTable'
 import { Toaster } from '@/components/ui/sonner'
 import './App.css'
-import { Button } from './components/ui/button'
 import JobFormPanel from './components/jobs/JobFormPanel'
 
 function App() {

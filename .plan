@@ -19,8 +19,6 @@ We are building a **local-first, privacy-focused Job Tracking Dashboard** hosted
 | **Hosting** | Cloudflare Pages (Static Asset Serving) |
 | **Constraints** | **No Backend DB**. Data lives on the user's device. "Nuclear" data loss risk if browser cache is cleared, requiring a robust Import/Export feature. |
 
----
-
 ## 3. Specifications & Requirements
 
 ### User Stories (Prioritized)
@@ -42,8 +40,6 @@ We are building a **local-first, privacy-focused Job Tracking Dashboard** hosted
 ### Functional Requirements
 *   **FR-001**: System MUST store at least 5MB of text data (Job Descriptions) without performance degradation.
 *   **FR-002**: System MUST load the dashboard in < 1 second (perceived performance).
-
----
 
 ## 4. Architecture & Data Model
 
@@ -136,7 +132,6 @@ graph TD
     style DB fill:#301934,stroke:#333,stroke-width:2px
     style App fill:#301934,stroke:#333,stroke-width:2px
 ```
----
 
 ## 5. Implementation Tasks
 
@@ -179,8 +174,6 @@ graph TD
 - [ ] **T018**: Create Cloudflare Pages project and connect to GitHub repo.
 - [ ] **T019**: Verify Build Command: `npm run build` and Output Dir: `dist`.
 
----
-
 ## 6. Notes & Decisions
 
 *   **2025-12-28**: Chosen **Dexie.js** over `localStorage` because Job Descriptions can be large, and we need efficient indexing/sorting which LocalStorage cannot provide.
@@ -214,3 +207,5 @@ graph TD
     * Passed the control of open state as a prop to the original form component, which is then called optionally, enabling its use in other contexts.
     * Also used `SheetContent`component's `onInteractOutside` prop to block any unforseen interaction from accidently closing the form.
 * **2025-01-03**: [US2] Coded a cleaner way for doing zero index access of file list using *array destructuring*.
+* **2025-01-03**: [T017] Defined column a configuration externally(outside the `JobTable` component) to enable future reusability, performant(loaded in2 module only once) and cleaner code(Config ⊥ Logic).
+    * Used the reduce+spread operator to create an initial state object for the columns

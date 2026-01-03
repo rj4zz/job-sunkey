@@ -11,6 +11,17 @@ import {
     TableHeader,
     TableRow
 } from "../ui/table";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { Columns4 } from "lucide-react";
+
+const COLUMNS = [
+    { key: 'company', label: 'Company', sortable: true },
+    { key: 'position', label: 'Position', sortable: true },
+    { key: 'status', label: 'Status', sortable: true },
+    { key: 'dateAdded', label: 'Date Added', sortable: true },
+    { key: 'salary', label: 'Salary', sortable: false },
+];
 
 export default function JobTable() {
 
@@ -53,12 +64,39 @@ export default function JobTable() {
         })
     }, [jobs, sortConfig])
 
+    /* Column Visibility */
+
+    const [visibleColumns, setVisibleColumns] = useState(
+        //Initial State Object
+        COLUMNS.reduce(
+            (acc, { key, sortable }) => ({...acc, [key]: sortable}),
+        {})
+    )
+
     if (!jobs) {
         return <div className="text-center">Loading...</div>
     }
 
     return (
         <div className="overflow-x-auto">
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                        <Columns4 /> View Columns
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    {COLUMNS.map(col => (
+                        <DropdownMenuCheckboxItem
+                            key={col.key}
+                            checked={visibleColumns[col.key]}
+                            onCheckedChange={() => {/* toggleColumn Handler */}}
+                        >
+                            {col.label}
+                        </DropdownMenuCheckboxItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
             <Table className="min-w-fit table-center">
                 <TableHeader>
                     <TableRow>
