@@ -37,7 +37,7 @@ export default function JobForm({ onSubmit }) {
             const jobData = {
                 //Generate UUID
                 id: self.crypto.randomUUID(),
-                //Add input data with current timestamp
+                //Add rest of the input data with current timestamp
                 ...formData,
                 dateAdded: Date.now(),
                 lastUpdated: Date.now(),

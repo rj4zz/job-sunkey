@@ -39,11 +39,6 @@ We are building a **local-first, privacy-focused Job Tracking Dashboard** hosted
     1. **Given** I have tracked jobs, **When** I click "Export Data", **Then** a `jobs_backup_[date].json` file downloads.
     2. **Given** a new browser session, **When** I upload that JSON file, **Then** all my previous job entries are restored.
 
-#### Story 3: Kanban/Status Workflow (Priority: P2)
-*   **Description**: As a user, I want to update the status of my application (e.g., from "Applied" to "Interviewing").
-*   **Acceptance Criteria**:
-    1. **Given** a job card, **When** I change status to "Rejected", **Then** the visual badge color changes (e.g., to red).
-
 ### Functional Requirements
 *   **FR-001**: System MUST store at least 5MB of text data (Job Descriptions) without performance degradation.
 *   **FR-002**: System MUST load the dashboard in < 1 second (perceived performance).
@@ -68,21 +63,79 @@ We are building a **local-first, privacy-focused Job Tracking Dashboard** hosted
 }
 ```
 
-### Proposed Directory Structure
+### Directory Structure
 ```text
 src/
-├── components/
-│   ├── ui/           # Shadcn components (Button, Card, Input)
-│   ├── JobForm.jsx   # Add/Edit logic
-│   ├── JobList.jsx   # Display logic (Grid/Table)
-│   └── DataControls.jsx # Import/Export buttons
-├── lib/
-│   ├── db.js         # Dexie database initialization
-│   └── utils.js      # Class merger for Tailwind
+├── App.css
 ├── App.jsx
+├── components/                     # Reusable components 
+│   ├── common
+│   │   └── SortableTableHead.jsx
+│   ├── data/                       # Components for data management (Import/Export)
+│   │   └── DataControls.jsx
+│   ├── jobs                        # Job Tracking Components
+│   │   ├── JobForm.jsx
+│   │   ├── JobFormPanel.jsx
+│   │   ├── JobRow.jsx
+│   │   └── JobTable.jsx
+│   └── ui/                         # Shadcn Components
+├── index.css
+├── lib/
+│   ├── db.js
+│   └── utils.js
 └── main.jsx
 ```
 
+### Component Hierarchy and Prop Flow
+```mermaid
+graph TD
+    %% Global Level
+    subgraph Root [src/]
+        App[App.jsx]
+    end
+
+    %% Jobs Components
+    subgraph Jobs_Dir [src/components/jobs/]
+        JFP[JobFormPanel]
+        JF[JobForm]
+        JT[JobTable]
+        JR[JobRow]
+    end
+
+    %% Data Components
+    subgraph Data_Dir [src/components/data/]
+        DC[DataControls]
+    end
+
+    %% Common Components
+    subgraph Common_Dir [src/components/common/]
+        STH[SortableTableHead]
+    end
+
+    %% Storage Layer
+    subgraph Storage [src/lib/]
+        DB[(db.js IndexedDB)]
+    end
+
+    %% Hierarchy and Prop Flow
+    App --> JFP
+    App --> DC
+    App --> JT
+
+    JFP -- "props: onSubmit" --> JF
+    JT -- "props: sortConfig, requestSort" --> STH
+    JT -- "props: job (object)" --> JR
+
+    %% Data Flow (Reactive/Direct)
+    JF -. "writes" .-> DB
+    JT -. "live query" .-> DB
+    DC -. "bulk/export" .-> DB
+    JR -. "delete" .-> DB
+
+    %% Styling
+    style DB fill:#301934,stroke:#333,stroke-width:2px
+    style App fill:#301934,stroke:#333,stroke-width:2px
+```
 ---
 
 ## 5. Implementation Tasks
@@ -123,8 +176,11 @@ src/
 ### Phase 5: Deployment & Polish
 - [x] **T016**: [US1] Move the `JobForm` to a shadcn `Sheet` component on the right
 - [ ] **T017**: [US1] Show a dropdown menu for sorting and hiding when clicking the column head.
-- [ ] **T018**: Create Cloudflare Pages project and connect to GitHub repo.
-- [ ] **T019**: Verify Build Command: `npm run build` and Output Dir: `dist`.
+- [ ] **T018**: [Optimization] Verify production minification (Vite uses LightningCSS/esbuild by default; no manual cssnano needed).
+- [ ] **T019**: Create Cloudflare Pages project and connect to GitHub repo.
+- [ ] **T020**: Verify Build Command: `npm run build` and Output Dir: `dist`.
+- [ ] **T021**: [Refactor] Reorganize component directory structure (jobs/, data/, common/) and update imports.
+
 
 ---
 
@@ -134,6 +190,7 @@ src/
 *   **2025-12-28**: Chosen **Shadcn UI** even though we are using JavaScript. We will use the CLI to generate JS components or manually strip types if the CLI fails, as the visual quality saves significant CSS time.
 *   **2025-12-28**: **Import/Export** is elevated to P1 because we cannot rely on browser persistence indefinitely.
 * **2025-12-29**: Transitioned to **Tailwind CSS v4** for the project foundation, prioritizing modern "CSS-first" architecture over legacy v3 configuration.
+    * **Vite**, by default, handles CSS minification using esbuild (or Lightning CSS in newer versions/configurations). **Tailwind CSS v4** integrates well with Vite's build process. When you execute npm run build, Vite will automatically minify and compress your CSS into a single, optimized file located in the dist/ folder.
 * **2025-12-29**: Discovered that `npx tailwindcss init -p` is deprecated in v4; configuration is now handled via the `@tailwindcss/vite` plugin and direct `@theme` blocks in CSS.
 * **2025-12-29**: Configured **Vite Path Aliases** using `path.resolve` in `vite.config.js` and also `jsconfig.json` to support the `@/` prefix required by Shadcn UI CLI for downloading components and for sane imports(@/folder instead of ../.. hell)
 * **2025-12-29**: Resolved "Unknown at rule @theme" editor warnings by identifying it as a linting false-positive, solvable via the Tailwind CSS IntelliSense extension or CSS linting overrides.
@@ -156,6 +213,7 @@ src/
 * **2025-01-02**: [US2] Reset the file upload input finally after handling fileUpload.
 * **2025-01-02**: [US1] Switched to a UUID based primary key so as to make data transfer easier.
 * **2025-01-02**: [US2] Used `Table.bulkPut` that upserts from backup.
-* **2025-01-03**: [US2] Refactored `JobForm` to a side panel.
+* **2025-01-03**: [US1] Refactored `JobForm` to a side panel.
     * Passed the control of open state as a prop to the original form component, which is then called optionally, enabling its use in other contexts.
     * Also used `SheetContent`component's `onInteractOutside` prop to block any unforseen interaction from accidently closing the form.
+* **2025-01-03**: [US2] Coded a cleaner way for doing zero index access of file list using *array destructuring*.
