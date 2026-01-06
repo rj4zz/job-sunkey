@@ -11,19 +11,8 @@ import {
     TableHeader,
     TableRow
 } from "../ui/table";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { Columns4 } from "lucide-react";
-
-const COLUMNS = [
-    { key: 'company', label: 'Company', sortable: true },
-    { key: 'position', label: 'Position', sortable: true },
-    { key: 'status', label: 'Status', sortable: true },
-    { key: 'dateAdded', label: 'Date Added', sortable: true },
-    { key: 'salary', label: 'Salary', sortable: false },
-];
-
-export default function JobTable() {
+import { COLUMNS } from "@/lib/constants";
+export default function JobTable({ visibleColumns }) {
 
     const jobs = useLiveQuery(() => {
         try {
@@ -64,15 +53,6 @@ export default function JobTable() {
         })
     }, [jobs, sortConfig])
 
-    /* Column Visibility */
-
-    const [visibleColumns, setVisibleColumns] = useState(
-        //Initial State Object
-        COLUMNS.reduce(
-            (acc, { key, sortable }) => ({...acc, [key]: sortable}),
-        {})
-    )
-
     if (!jobs) {
         return <div className="text-center">Loading...</div>
     }
@@ -82,34 +62,19 @@ export default function JobTable() {
             <Table className="min-w-fit table-center">
                 <TableHeader>
                     <TableRow>
-                        <SortableTableHead
-                            sortConfig={sortConfig}
-                            requestSort={requestSort}
-                            columnKey="company"
-                        >
-                            Company
-                        </SortableTableHead>
-                        <SortableTableHead
-                            sortConfig={sortConfig}
-                            requestSort={requestSort}
-                            columnKey="position"
-                        >
-                            Position
-                        </SortableTableHead>
-                        <SortableTableHead
-                            sortConfig={sortConfig}
-                            requestSort={requestSort}
-                            columnKey="status"
-                        >
-                            Status
-                        </SortableTableHead>
-                        <SortableTableHead
-                            sortConfig={sortConfig}
-                            requestSort={requestSort}
-                            columnKey="dateAdded"
-                        >
-                            Date Added
-                        </SortableTableHead>
+                        {COLUMNS.map((col) => 
+                            //Implicitly return if visible
+                            visibleColumns[col.key] && (
+                                <SortableTableHead
+                                    key={col.key}
+                                    sortConfig={sortConfig}
+                                    requestSort={requestSort}
+                                    columnKey={col.key}
+                                >
+                                    {col.label}
+                                </SortableTableHead>
+                            )
+                        )}
                         <TableHead></TableHead>
                     </TableRow>
                 </TableHeader>
@@ -117,7 +82,12 @@ export default function JobTable() {
                     {sortedJobs.length === 0 ? (
                         <TableRow>
                             <TableCell 
-                                colSpan={5} 
+                                colSpan={Object
+                                            .values(visibleColumns)
+                                            .filter(value => value === true)
+                                            .length
+                                            + 1
+                                        } 
                                 className="text-center py-8"
                             >
                                 No jobs found. Add a job to get started.
@@ -125,7 +95,7 @@ export default function JobTable() {
                         </TableRow>
                     ) : (
                         sortedJobs.map((job) => (
-                            <JobRow key={job.id} job={job} />
+                            <JobRow key={job.id} job={job} visibleColumns={visibleColumns}/>
                         ))
                     )}
                 </TableBody>

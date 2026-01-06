@@ -1,0 +1,41 @@
+import { useState } from "react";
+import JobFormPanel from "./jobs/JobFormPanel";
+import DataControls from "./data/DataControls";
+import JobTable from "./jobs/JobTable";
+import ColumnVisibilityMenu from "./jobs/ColumnVisibilityMenu";
+import { COLUMNS } from "@/lib/constants";
+
+export default function JobDashboard() {
+  /* Column Visibility */
+  const [visibleColumns, setVisibleColumns] = useState(
+    //Initial State Object
+    COLUMNS.reduce(
+      (acc, { key, defaultVisible }) => ({ ...acc, [key]: defaultVisible }),
+      {}
+    )
+  );
+
+  const toggleColumn = (columnKey) => {
+    setVisibleColumns((prev) => ({
+      ...prev,
+      [columnKey]: !prev[columnKey],
+    }));
+  };
+
+  return (
+    <div className="w-full max-w-4xl">
+      <div id="toolbar" className="flex gap-2 mb-4 justify-end">
+        {/* The View Button */}
+        <ColumnVisibilityMenu
+          visibleColumns={visibleColumns}
+          toggleColumn={toggleColumn}
+        />
+        {/* The Add New Button */}
+        <JobFormPanel />
+        {/* The Import/Export Button */}
+        <DataControls />
+      </div>
+      <JobTable visibleColumns={visibleColumns} />
+    </div>
+  );
+}

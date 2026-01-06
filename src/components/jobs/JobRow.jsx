@@ -12,23 +12,11 @@ import {
 import { db } from "@/lib/db";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { TableCell, TableRow } from "../ui/table";
-function getStatusVariant(status) {
-    switch (status) {
-        case 'rejected':
-            return 'destructive'
-        case 'offer':
-            return 'success'
-        case 'interviewing':
-            return 'info' 
-        default:
-            return 'default';
-    }
-}
+import { COLUMNS } from "@/lib/constants";
 
-export default function JobRow({ job }) {
+export default function JobRow({ job, visibleColumns }) {
     
     const handleDelete = async (id) => {
         try {
@@ -41,18 +29,15 @@ export default function JobRow({ job }) {
     }
 
     return (
-        <TableRow key={job.id}>
-            <TableCell>{job.company}</TableCell>
-            <TableCell>{job.position}</TableCell>
-            <TableCell>
-                <Badge 
-                    variant={getStatusVariant(job.status)}>
-                    {job.status}
-                </Badge>
-            </TableCell>
-            <TableCell>
-                {new Date(job.dateAdded).toLocaleDateString('en-GB')}
-            </TableCell>
+        <TableRow>
+            {COLUMNS.map((col) => 
+                visibleColumns[col.key] && (
+                    <TableCell key={col.key}>
+                        {/* If the render func does'nt exist insert the label  */}
+                        {col.render?.(job[col.key]) || job[col.key]}
+                    </TableCell>
+                )
+            )}
             <TableCell>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>

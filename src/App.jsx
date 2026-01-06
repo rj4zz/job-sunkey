@@ -1,19 +1,13 @@
-import DataControls from '@/components/data/DataControls'
-import JobTable from '@/components/jobs/JobTable'
 import { Toaster } from '@/components/ui/sonner'
 import './App.css'
-import JobFormPanel from './components/jobs/JobFormPanel'
+import JobDashboard from './components/JobDashboard'
 
 function App() {
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4">
       <h1 className="text-2x1 font-bold mb-6">Job Tracker</h1>
-      <div className="w-full max-w-4xl mt-8">
-        <div className='flex gap-2 mb-4 justify-end'>
-          <JobFormPanel />
-          <DataControls />
-        </div>
-        <JobTable />
+      <div className="mt-8">
+        <JobDashboard />
       </div>
       <Toaster />
     </div>
