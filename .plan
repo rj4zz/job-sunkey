@@ -209,5 +209,6 @@ graph TD
 * **2025-01-03**: [US2] Coded a cleaner way for doing zero index access of file list using *array destructuring*.
 * **2025-01-03**: [T017] Defined column a configuration externally(outside the `JobTable` component) to enable future reusability, performant(loaded in2 module only once) and cleaner code(Config ⊥ Logic).
     * Used the reduce+spread operator to create an initial state object for the columns
-* **2025-01-06**: Switched to a *Feature Wrapper* to wrap around JobTable and Toolbar components. While **React Context** was an alternative, its more opaque and difficult to track.
-* **2025-01-06**: Centralized the column configuration into a utility script.
+* **2025-01-06**: [T017] Opted for a **Master "View" Button** in the toolbar rather than per-column dropdowns. This provides a centralized UX for managing the table layout without cluttering individual headers.
+* **2025-01-06**: Switched to a *Feature Wrapper* (`JobDashboard`) to wrap around `JobTable` and Toolbar components. While **React Context** was an alternative, this pattern provides clearer data flow and better debuggability.
+* **2025-01-06**: [T017] Established a **Centralized Column Configuration** in `constants.jsx`. This array is the single source of truth for labels, sorting keys, and dynamic rendering logic.

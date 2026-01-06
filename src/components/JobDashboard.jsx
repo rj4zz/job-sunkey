@@ -23,7 +23,7 @@ export default function JobDashboard() {
   };
 
   return (
-    <div className="w-full max-w-4xl">
+    <>
       <div id="toolbar" className="flex gap-2 mb-4 justify-end">
         {/* The View Button */}
         <ColumnVisibilityMenu
@@ -36,6 +36,6 @@ export default function JobDashboard() {
         <DataControls />
       </div>
       <JobTable visibleColumns={visibleColumns} />
-    </div>
+    </>
   );
 }
