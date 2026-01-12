@@ -15,7 +15,10 @@ export default function ColumnVisibilityMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">
+        <Button
+          variant="outline"
+          className="hover:bg-gray-100 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-input"
+        >
           <Columns4 /> View
         </Button>
       </DropdownMenuTrigger>

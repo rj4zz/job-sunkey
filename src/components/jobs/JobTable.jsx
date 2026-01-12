@@ -27,12 +27,22 @@ export default function JobTable({ visibleColumns }) {
     direction: "asc",
   });
 
-  const requestSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
+  const requestSort = (key, direction) => {
+    // If direction is explicitly null, we reset the sorting
+    if (direction === null) {
+      setSortConfig({ key: null, direction: "asc" });
+      return;
     }
-    setSortConfig({ key, direction });
+
+    let newDirection = direction;
+    if (!newDirection) {
+      newDirection = "asc";
+      if (sortConfig.key === key && sortConfig.direction === "asc") {
+        newDirection = "desc";
+      }
+    }
+
+    setSortConfig({ key, direction: newDirection });
   };
 
   const sortedJobs = useMemo(() => {
