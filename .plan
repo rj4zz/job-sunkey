@@ -1,7 +1,7 @@
 # Project Implementation Plan: Local-First Job Tracker
 
 **Branch**: `main` | **Date**: 2025-12-28 | **Owner**: rj4zz
-**Status**: In Progress
+**Status**: Done
 
 ---
 
@@ -15,7 +15,7 @@ We are building a **local-first, privacy-focused Job Tracking Dashboard** hosted
 | **Language** | JavaScript (ES6+) + React 18+ |
 | **Build Tool** | Vite (Fast builds, optimized for Cloudflare Pages) |
 | **Storage** | **IndexedDB** (via **Dexie.js** wrapper) |
-| **UI Framework** | **Shadcn UI** + Tailwind CSS (configured for JavaScript) |
+| **UI Framework** | **Shadcn UI** + Tailwind CSS (v4) (configured for JavaScript) |
 | **Hosting** | Cloudflare Pages (Static Asset Serving) |
 | **Constraints** | **No Backend DB**. Data lives on the user's device. "Nuclear" data loss risk if browser cache is cleared, requiring a robust Import/Export feature. |
 
@@ -69,14 +69,17 @@ src/
 │   │   └── SortableTableHead.jsx
 │   ├── data/                       # Components for data management (Import/Export)
 │   │   └── DataControls.jsx
-│   ├── jobs                        # Job Tracking Components
+│   ├── jobs
+│   │   ├── ColumnVisibilityMenu.jsx
 │   │   ├── JobForm.jsx
 │   │   ├── JobFormPanel.jsx
 │   │   ├── JobRow.jsx
 │   │   └── JobTable.jsx
+│   ├── JobDashboard.jsx            # Feature Wrapper for jobs/data
 │   └── ui/                         # Shadcn Components
 ├── index.css
 ├── lib/
+│   ├── constants.jsx
 │   ├── db.js
 │   └── utils.js
 └── main.jsx
@@ -90,12 +93,18 @@ graph TD
         App[App.jsx]
     end
 
+    %% Dashboard Wrapper
+    subgraph Dashboard_Dir [src/components/]
+        JD[JobDashboard.jsx]
+    end
+
     %% Jobs Components
     subgraph Jobs_Dir [src/components/jobs/]
         JFP[JobFormPanel]
         JF[JobForm]
         JT[JobTable]
         JR[JobRow]
+        CVM[ColumnVisibilityMenu]
     end
 
     %% Data Components
@@ -114,25 +123,34 @@ graph TD
     end
 
     %% Hierarchy and Prop Flow
-    App --> JFP
-    App --> DC
-    App --> JT
+    App --> JD
+    
+    %% Dashboard children
+    JD --> JFP
+    JD --> DC
+    CVM --> JD
+    JD --> JT
 
-    JFP -- "props: onSubmit" --> JF
+    %% Prop Drilling / Flow
+    JFP -- "renders" --> JF
+    
+    JD -- "props: visibleColumns, toggleColumn" --> CVM
+    JD -- "props: visibleColumns" --> JT
+    
     JT -- "props: sortConfig, requestSort" --> STH
-    JT -- "props: job (object)" --> JR
+    JT -- "props: job, visibleColumns" --> JR
 
     %% Data Flow (Reactive/Direct)
-    JF -. "writes" .-> DB
-    JT -. "live query" .-> DB
-    DC -. "bulk/export" .-> DB
-    JR -. "delete" .-> DB
+    JF -. "writes (db.jobs.add)" .-> DB
+    JT -. "live query (useLiveQuery)" .-> DB
+    DC -. "bulk/export (toArray/bulkPut)" .-> DB
+    JR -. "delete (db.jobs.delete)" .-> DB
 
     %% Styling
     style DB fill:#301934,stroke:#333,stroke-width:2px
     style App fill:#301934,stroke:#333,stroke-width:2px
+    style JD fill:#1e293b,stroke:#333,stroke-width:2px
 ```
-
 ## 5. Implementation Tasks
 
 **Legend**: `[P]` Parallelizable | `[US#]` User Story | `[ ]` To Do
@@ -170,9 +188,10 @@ graph TD
 
 ### Phase 5: Deployment & Polish
 - [x] **T016**: [US1] Move the `JobForm` to a shadcn `Sheet` component on the right
-- [ ] **T017**: [US1] Show a dropdown menu for sorting and hiding when clicking the column head.
-- [ ] **T018**: Create Cloudflare Pages project and connect to GitHub repo.
-- [ ] **T019**: Verify Build Command: `npm run build` and Output Dir: `dist`.
+- [x] **T017**: [US1] Show a dropdown menu for sorting and hiding when clicking the column head.
+- [x] **T018**: Wrap the JobDashboard component inside a Card component.
+- [ ] **T019**: Create Cloudflare Pages project and connect to GitHub repo.
+- [ ] **T020**: Verify Build Command: `npm run build` and Output Dir: `dist`.
 
 ## 6. Notes & Decisions
 
